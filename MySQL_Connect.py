@@ -12,7 +12,7 @@ class MySQLConnect(object):
         database:数据库名
         charset:编码格式
         """
-        self.db = pymysql.connect(host='host', user='user', password='password', port=3306, database='database'
+        self.db = pymysql.connect(host='host', user='user', password='password', port='port', database='database'
                                   , charset='utf8')
         self.cursor = self.db.cursor()
 
@@ -43,6 +43,6 @@ class MySQLConnect(object):
 
 
 if __name__ == '__main__':
-    mc = MySQLConnect('192.168.5.36', 'root', 'aa111111', 'wdd_test')
+    mc = MySQLConnect('localhost', 'root', '123456', 'python_100days')
     mc.exec_data('insert into test_user values(%s, %s)' % (1, '呵呵'))
     mc.select('select * from test_user')

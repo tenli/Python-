@@ -21,7 +21,8 @@ def gen_codes(code_long, code_num):
         else:
             gen_code_list.append(gen_code)
             i += 1
-    print(gen_code_list)
+    # print(gen_code_list)
+    return gen_code_list
 
 
 if __name__ == '__main__':
