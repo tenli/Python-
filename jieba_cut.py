@@ -9,10 +9,10 @@ import pandas as pd
 import numpy as np
 import jieba
 
-jieba.load_userdict('C:\\Users\\fangs\\Desktop\\帮我买.csv')
-stopword = pd.read_csv('G:/jieba/cutword/cancel/cancel_order_stopword.txt', encoding='utf8', index_col=False)
+jieba.load_userdict('goods_cutword.txt')
+stopword = pd.read_csv('goods_stopword.txt', encoding='utf8', index_col=False)
 
-data = pd.read_csv('C:\\Users\\fangs\\Desktop\\帮我买.csv')
+data = pd.read_csv('C:\\Users\\fangs\\Desktop\\buy1.csv', encoding='GBK').astype(str)
 
 # data = pd.read_csv('D:\\uu_input_spyder_data\\result.txt')
 # ==============================================================================
@@ -22,32 +22,31 @@ data = pd.read_csv('C:\\Users\\fangs\\Desktop\\帮我买.csv')
 # data.dtypes
 # ==============================================================================
 
-data = data.drop(['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1)  # 删除列
+# data = data.drop(['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1)  # 删除列
 
-data['time_day'] = pd.to_datetime(data['取消']).dt.day
-data['time_hour'] = pd.to_datetime(data['取消']).dt.hour
+# data['time_day'] = pd.to_datetime(data['取消']).dt.day
+# data['time_hour'] = pd.to_datetime(data['取消']).dt.hour
 
 time_hours = []
 segments = []
 
 for index, row in data.iterrows():
-    time_hour = row['time_hour']
-    content = row['取消原因']
+    # time_hour = row['time_hour']
+    content = row['note']
     segs = jieba.cut(content)
     for seg in segs:
         if seg not in stopword.values and len(seg.strip()) > 0:
-            time_hours.append(time_hour)
             segments.append(seg)
 
 note = pd.DataFrame(
     {
-        'time_hour': time_hours,
+        #'time_hour': time_hours,
         'seg': segments,
     }
 )
 
 note_agg = pd.pivot_table(
-    note, index=['seg', 'time_hour'], aggfunc=np.size,
+    note, index=['seg'], aggfunc=np.size,
 )
 
 column = ['pinci']

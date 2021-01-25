@@ -13,6 +13,11 @@ class MyDbUtil(object):
         self._conn.close()
 
     def insert(self, table, insert_data):
+        """
+        :param table:
+        :param insert_data  type:[{},{}]:
+        :return:effect_row 1 影响的行数
+        """
         try:
             for data in insert_data:
                 key = ','.join(data.keys())
@@ -28,6 +33,11 @@ class MyDbUtil(object):
             pass
 
     def delete(self, table, condition):
+        """
+        :param table:
+        :param condition type{"":""}:
+        :return effect_row 1 影响的行数:
+        """
         condition_list = self._deal_values(condition)
         condition_data = ' and '.join(condition_list)
         sql = "delete from {table} where {condition}".format(table=table, condition=condition_data)
@@ -36,6 +46,12 @@ class MyDbUtil(object):
         return effect_row
 
     def update(self, table, data, condition=None):
+        """
+        :param table:
+        :param data type 字典 {}:
+        :param condition tpye 字典 {}:
+        :return:
+        """
         update_list = self._deal_values(data)
         update_data = ",".join(update_list)
         if condition is not None:
@@ -50,7 +66,13 @@ class MyDbUtil(object):
         return effect_row
 
     def select_id(self, table, id):
-
+        """
+        :param table:
+        :param show_list type 列表 （字段）:
+        :param condition type 字典:
+        :param get_one bool:
+        :return:
+        """
         sql = "select * from {table} where id = {id}".format(table=table, id=id)
         self.__cursor.execute(sql)
         result = self.__cursor.fetchone()
@@ -61,7 +83,12 @@ class MyDbUtil(object):
             return None
 
     def select_some(self, table, filed, value):
-
+        """
+        :param table:
+        :param show_list type 列表 （字段）:
+        :param condition type 字典:
+        :return:
+        """
         sql = "select * from {table} where {filed} = '{value}'".format(table=table, filed=filed, value=value)
         self.__cursor.execute(sql)
         result = self.__cursor.fetchall()
@@ -72,7 +99,12 @@ class MyDbUtil(object):
             return None
 
     def select_all(self, table):
-
+        """
+        :param table:
+        :param show_list type 列表 （字段）:
+        :param condition type 字典:
+        :return:
+        """
         sql = "select * from {table}".format(table=table)
         self.__cursor.execute(sql)
         result = self.__cursor.fetchall()
@@ -91,7 +123,10 @@ class MyDbUtil(object):
             return None
 
     def _deal_values(self, value):
-
+        """
+        self._deal_values(value) -> str or list
+            处理传进来的参数
+        """
         # 如果是字符串则加上''
         if isinstance(value, str):
             value = ("'{value}'".format(value=value))
